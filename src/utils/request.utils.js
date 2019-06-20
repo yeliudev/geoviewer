@@ -29,7 +29,6 @@ const request = (options) => {
     // Fetch data
     fetch(url, {
         method: options.method,
-        headers: options.headers ? options.headers : undefined,
         body: options.method === 'POST' ? JSON.stringify(options.params) : undefined
     })
         .then(req => req.json())
