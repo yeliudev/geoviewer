@@ -1,0 +1,14 @@
+/* Written by Ye Liu */
+
+.MuiAvatar-root.MuiAvatar-colorDefault {
+    background-color: transparent !important;
+}
+
+.MuiIconButton-root.MuiIconButton-edgeEnd {
+    background-color: transparent !important;
+    cursor: grab;
+}
+
+.MuiIconButton-root.MuiIconButton-edgeEnd:active {
+    cursor: grabbing !important;
+}

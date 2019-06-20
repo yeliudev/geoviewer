@@ -1,0 +1,34 @@
+/* Written by Ye Liu */
+
+.mapboxgl-ctrl {
+    -webkit-box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.15) !important;
+    -moz-box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.15) !important;
+}
+
+a.mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib {
+    display: none !important;
+}
+
+.mapboxgl-ctrl-minimap {
+    width: 280px;
+    height: 180px;
+    border-radius: 4px;
+    margin-bottom: 2px !important;
+}
+
+.mapboxgl-ctrl-traffic {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="-2 -2 22 22"><path d="M13 4.1L12 3H6L5 4.1l-2 9.8L4 15h10l1-1.1-2-9.8zM10 13H8v-3h2v3zm0-5H8V5h2v3z"/></svg>') !important;
+}
+
+.mapboxgl-ctrl-map {
+    background-image: url('data:image/svg+xml;charset=utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23333" viewBox="-10 -10 60 60"><path d="M25 31.64V11.873L15 8.362v19.766zM34.14 5q.86 0 .86.86v25.157q0 .625-.625.783L25 35l-10-3.513-8.907 3.438-.233.078q-.862 0-.862-.86V8.987q0-.625.624-.784L15 5.005l10 3.513 8.905-3.438z"/></svg>') !important;
+}
+
+.mapboxgl-popup {
+    min-width: 320px !important;
+}
+
+.mapboxgl-popup-content {
+    padding: 0 !important;
+}

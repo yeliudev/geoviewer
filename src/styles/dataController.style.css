@@ -1,0 +1,102 @@
+/* Written by Ye Liu */
+
+input[type=text]:not(.browser-default), input[type=number]:not(.browser-default) {
+    border: none !important;
+    margin: 0 !important;
+}
+
+input[type=text]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]) {
+    box-shadow: none !important;
+}
+
+label.MuiFormControlLabel-root {
+    margin-left: 0 !important;
+}
+
+.MuiCardContent-root:last-child {
+    padding-bottom: 18px !important;
+}
+
+.MuiInput-formControl {
+    height: 32px !important;
+    margin-top: 13px !important;
+}
+
+.wrapper {
+    transition: all 300ms ease-in-out !important;
+}
+
+.MuiTableCell-paddingCheckbox:last-child {
+    text-align: right !important;
+    padding-right: 22px !important;
+}
+
+.MuiTableRow-footer, .MuiTableCell-footer {
+    max-width: none !important;
+    border: none !important;
+}
+
+.MuiTableCell-root {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: 1.5 !important;
+    padding: 5px 5px 5px 16px !important;
+}
+
+.preview-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.preview-image-container-edit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.preview-image-container-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.material-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.longitude-image {
+    width: 100%;
+}
+
+.latitude-image {
+    height: 100%;
+}
+
+.upload-box-btn:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+}
+
+.hidden {
+    display: none !important;
+}

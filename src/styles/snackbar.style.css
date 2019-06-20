@@ -1,0 +1,12 @@
+/* Written by Ye Liu */
+
+.MuiSnackbarContent-message {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    letter-spacing: 0.35px;
+}
+
+.snackbar-btn {
+    font-size: 0.875rem !important;
+    line-height: 1.46429em !important;
+    font-weight: 400 !important;
+}
