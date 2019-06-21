@@ -62,9 +62,11 @@ class Popup extends React.Component {
     componentDidMount() {
         // Bind event listener
         this.bindPopupListener = emitter.addListener('bindPopup', e => {
+            // Bind popup
             var el = document.getElementById('popup');
             document.getElementById('popup-container').appendChild(el);
 
+            // Load weather widget
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = `https://darksky.net/widget/default-small/${e.geometry.geometry.coordinates[1].toString()},${e.geometry.geometry.coordinates[0].toString()}/ca12/en.js?height=60`;

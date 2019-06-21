@@ -1,8 +1,7 @@
 /* Written by Ye Liu */
 
-import M from 'materialize-css';
-
 import emitter from '@utils/events.utils';
+import request from '@utils/request.utils';
 
 const datasets = [
     {
@@ -27,29 +26,22 @@ const datasets = [
     }
 ];
 
-const loadDataset = (id, callback) => {
-    // Check dataset availability
-    if (datasets[id].data) {
-        callback();
-        return;
-    }
+const loadDataset = (id) => {
+    // Initiate request
+    request({
+        url: datasets[id].url,
+        method: 'GET',
+        successCallback: (res) => {
+            // Save data
+            datasets[id].data = res.data;
 
-    // Download dataset
-    fetch(datasets[id].url)
-        .then(req => req.json())
-        .then(res => {
-            if (res.success) {
-                // Save data
-                datasets[id].data = res.data;
-
-                // Emit events
-                emitter.emit('refreshDatasets', id);
-
-                M.toast({ html: `Dataset '${datasets[id].name}' download succeed` });
-            } else {
-                M.toast({ html: `Dataset '${datasets[id].name}' download failed` });
-            }
-        });
+            emitter.emit('refreshDatasets', id);
+            emitter.emit('showSnackbar', 'success', `Dataset '${datasets[id].name}' download succeed.`);
+        },
+        failedCallback: () => {
+            emitter.emit('showSnackbar', 'error', `Dataset '${datasets[id].name}' download failed.`);
+        }
+    });
 };
 
 export { datasets, loadDataset };

@@ -1,14 +1,5 @@
 /* Written by Ye Liu */
 
-input[type=text]:not(.browser-default), input[type=number]:not(.browser-default) {
-    border: none !important;
-    margin: 0 !important;
-}
-
-input[type=text]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]) {
-    box-shadow: none !important;
-}
-
 label.MuiFormControlLabel-root {
     margin-left: 0 !important;
 }

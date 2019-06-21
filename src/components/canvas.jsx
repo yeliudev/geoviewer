@@ -125,6 +125,11 @@ class Canvas extends React.Component {
         document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0].setAttribute('type', 'search-box');
 
         // Bind event listeners
+        map.on('load', () => {
+            // Hide loader
+            document.getElementById('loader-wrapper').classList.add('loaded');
+        });
+
         map.on('draw.create', e => {
             if (!this.state.gettingPoint) {
                 return;

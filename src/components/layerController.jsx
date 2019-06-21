@@ -42,8 +42,8 @@ const styles = {
         position: 'fixed',
         top: 74,
         right: 10,
-        borderRadius: 4,
         width: 300,
+        borderRadius: 4,
         margin: 0,
         zIndex: 900
     },

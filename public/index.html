@@ -12,13 +12,17 @@
   <!-- Open Graph Info -->
   <meta property="og:title" content="GeoViewer" />
   <meta property="og:url" content="https://yeliu.me/geoviewer" />
-  <meta property="og:description" content="An online, light-weight, user-friendly geographical information visualizer." />
+  <meta property="og:description" content="An online, light-weight and user-friendly geographical information visualizer." />
   <meta property="og:site_name" content="GeoViewer" />
 
   <!-- Display Info -->
   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <title>GeoViewer - The next generation of Geographical Information Visualizer</title>
+
+  <!-- Loaders -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/loaders.css/0.1.2/loaders.min.css" />
+  <link rel="stylesheet" href="%PUBLIC_URL%/static/styles/loader.style.css" />
 
   <!-- Material Design Icons -->
   <link rel="stylesheet" href="https://fonts.loli.net/icon?family=Material+Icons" />
@@ -29,7 +33,23 @@
 </head>
 
 <body>
+  <!-- No Script Page -->
   <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <!-- Loader Page -->
+  <div id="loader-wrapper">
+    <div class="loader line-scale-pulse-out">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+  </div>
+
+  <!-- Main Page -->
   <div id="root"></div>
 </body>
 

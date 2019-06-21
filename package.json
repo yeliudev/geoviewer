@@ -42,6 +42,7 @@
     "mapbox-gl": "^1.0.0",
     "material-table": "^1.39.2",
     "materialize-css": "^1.0.0",
+    "md5": "^2.2.1",
     "mini-css-extract-plugin": "0.7.0",
     "notistack": "^0.8.6",
     "optimize-css-assets-webpack-plugin": "5.0.1",

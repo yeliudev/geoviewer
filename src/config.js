@@ -7,6 +7,18 @@ const ACCESS_TOKEN = 'pk.eyJ1IjoiZ29vbGhhbnJyeSIsImEiOiJjanYxYWJtajgxOHphM3lteHh
 const API_ROOT = 'http://localhost:5757/api';
 
 const SERVICE = {
+    // User login interface
+    login: {
+        url: `${API_ROOT}/login`,
+        method: 'POST'
+    },
+
+    // User logout interface
+    logout: {
+        url: `${API_ROOT}/logout`,
+        method: 'POST'
+    },
+
     // Spatial query interface
     search: {
         url: `${API_ROOT}/search`,

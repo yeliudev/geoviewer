@@ -23,13 +23,20 @@ const request = (options) => {
     var url = options.method === 'POST' ? options.url : parseUrl(options.url, options.params);
     options.successCallback = options.successCallback || (() => { });
     options.finallyCallback = options.finallyCallback || (() => { });
-    options.failedCallback = options.failedCallback || ((res) => emitter.emit('showSnackbar', 'error', res.errMsg));
     options.errorCallback = options.errorCallback || ((err) => emitter.emit('showSnackbar', 'error', err.toString()));
+    options.failedCallback = options.failedCallback || ((res) => {
+        if (res.authError) {
+            emitter.emit('login');
+            emitter.emit('setLoginState', false);
+        }
+        emitter.emit('showSnackbar', 'error', res.errMsg);
+    });
 
     // Fetch data
     fetch(url, {
         method: options.method,
-        body: options.method === 'POST' ? JSON.stringify(options.params) : undefined
+        body: options.method === 'POST' ? JSON.stringify(options.params) : undefined,
+        credentials: 'include'
     })
         .then(req => req.json())
         .then(res => res.success ? options.successCallback(res) : options.failedCallback(res))

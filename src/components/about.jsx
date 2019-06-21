@@ -11,8 +11,8 @@ class About extends React.Component {
     componentDidMount() {
         // Initialize Modal
         document.addEventListener('DOMContentLoaded', () => {
-            var elems = document.querySelectorAll('.modal');
-            var modal = M.Modal.init(elems)[0];
+            var elem = document.getElementById('about');
+            var modal = M.Modal.init(elem);
             this.setState({
                 modal: modal
             });
@@ -30,7 +30,7 @@ class About extends React.Component {
                 <div className="modal-content">
                     <h4>About</h4>
                     <p>
-                        GeoViewer is an online, light-weight and user-friendly geographical information visualizer, made with ReactJS + Materialize + Mapbox-GL.
+                        GeoViewer is an online, light-weight and user-friendly geographical information visualizer, made with ReactJS + Material-UI + Mapbox-GL.
                     </p>
                     <p>
                         Designed & Written by&nbsp;
