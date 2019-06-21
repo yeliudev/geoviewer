@@ -1,6 +1,7 @@
 {
   "name": "geoviewer",
   "version": "0.1.0",
+  "homepage": "https://yeliu.me/geoviewer",
   "private": true,
   "dependencies": {
     "@babel/core": "7.4.5",
