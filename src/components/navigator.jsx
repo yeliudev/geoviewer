@@ -27,7 +27,7 @@ const styles = {
     root: {
         position: 'fixed',
         top: 0,
-        zIndex: 1000
+        zIndex: 900
     },
     logoContainer: {
         height: 24,

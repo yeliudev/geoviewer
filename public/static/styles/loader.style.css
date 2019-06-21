@@ -36,7 +36,7 @@
 .loader-section {
     position: fixed;
     top: 0;
-    width: 51%;
+    width: 50%;
     height: 100%;
     background: #242832;
     z-index: 1000;
