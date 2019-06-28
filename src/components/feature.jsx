@@ -43,7 +43,7 @@ class Feature extends React.Component {
             <div className="tap-target indigo accent-2" data-target="menu">
                 <div className="tap-target-content white-text">
                     <h5>Welcome to GeoViewer!</h5>
-                    <p>This is an online, light-weight and user-friendly geographical information visualizer, made with ReactJS + Material-UI + Mapbox-GL.</p>
+                    <p>This is an online, light-weight and user-friendly geographical information visualizer, made with React + Material-UI + Mapbox-GL + Koa.</p>
                 </div>
             </div>
         );

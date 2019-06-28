@@ -192,7 +192,7 @@ class LayerController extends React.Component {
                         {/* Card header */}
                         <CardContent style={styles.header}>
                             <Typography gutterBottom variant="h5" component="h2">Layers</Typography>
-                            <Typography variant="body2" color="textSecondary">Configure and sort layers</Typography>
+                            <Typography variant="body2" color="textSecondary">Download and display layers</Typography>
                             <IconButton style={styles.closeBtn} aria-label="Close" onClick={this.handleCloseClick}>
                                 <Icon fontSize="inherit">chevron_right</Icon>
                             </IconButton>

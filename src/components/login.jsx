@@ -5,7 +5,6 @@ import md5 from 'md5';
 
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -28,15 +27,16 @@ const theme = createMuiTheme({
 
 const styles = {
     loginContainer: {
-        width: 300,
-        height: 350,
+        width: 320,
+        height: 420,
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
+        alignItems: 'center'
     },
-    title: {
-        marginBottom: 20
+    logo: {
+        height: 100,
+        width: 100,
+        margin: '55px 0 30px'
     },
     inputBox: {
         width: 240,
@@ -50,8 +50,8 @@ const styles = {
         position: 'relative'
     },
     loginBtn: {
-        width: 120,
-        marginTop: 20
+        width: 110,
+        marginTop: 15
     },
     loginBtnProgress: {
         position: 'absolute',
@@ -70,12 +70,26 @@ class Login extends React.Component {
     state = {
         open: false,
         remember: false,
-        logining: false
+        logining: false,
+        username: null,
+        password: null
     }
 
     handleLoginClose = () => {
         this.setState({
             open: false
+        });
+    }
+
+    handleUsernameChange = (e) => {
+        this.setState({
+            username: e.target.value
+        });
+    }
+
+    handlePasswordChange = (e) => {
+        this.setState({
+            password: e.target.value
         });
     }
 
@@ -91,10 +105,14 @@ class Login extends React.Component {
             logining: true
         });
 
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        password = password.substr(0, 5) === '$md5$' ? password.substr(5) : md5(password);
+
         // Generate request parameters
         var params = {
-            username: document.getElementById('username').value,
-            password: md5(document.getElementById('password').value)
+            username: username,
+            password: password
         };
 
         // Initiate request
@@ -109,11 +127,28 @@ class Login extends React.Component {
                 // Switch login icon
                 emitter.emit('setLoginState', true);
 
+                // Save login data
+                if (this.state.remember) {
+                    localStorage.setItem('username', username);
+                    localStorage.setItem('password', '$md5$' + password);
+                }
+
                 this.setState({
                     open: false
                 });
             },
             finallyCallback: () => {
+                // Clear login data
+                if (!this.state.remember) {
+                    localStorage.removeItem('username');
+                    localStorage.removeItem('password');
+
+                    this.setState({
+                        username: null,
+                        password: null
+                    })
+                }
+
                 this.setState({
                     logining: false
                 });
@@ -122,6 +157,15 @@ class Login extends React.Component {
     }
 
     componentDidMount() {
+        // Get saved login data
+        if (localStorage.hasOwnProperty('username') && localStorage.hasOwnProperty('password')) {
+            this.setState({
+                username: localStorage.getItem('username'),
+                password: localStorage.getItem('password'),
+                remember: true
+            });
+        }
+
         // Bind event listener
         this.loginListener = emitter.addListener('login', () => {
             this.setState({
@@ -140,13 +184,15 @@ class Login extends React.Component {
             <MuiThemeProvider theme={theme}>
                 <Dialog open={this.state.open} TransitionComponent={Transition} onClose={this.handleLoginClose}>
                     <div style={styles.loginContainer}>
-                        <Typography style={styles.title} variant="h5" gutterBottom>Sign In</Typography>
+                        <img style={styles.logo} src="./static/assets/logo-circle.png" alt="" />
                         <TextField
                             style={styles.inputBox}
                             variant="outlined"
                             margin="dense"
                             id="username"
                             label="Username"
+                            value={this.state.username}
+                            onChange={this.handleUsernameChange}
                         />
                         <TextField
                             style={styles.inputBox}
@@ -155,6 +201,8 @@ class Login extends React.Component {
                             id="password"
                             type="password"
                             label="Password"
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange}
                         />
                         <FormControlLabel
                             style={styles.checkBox}

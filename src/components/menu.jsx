@@ -24,14 +24,18 @@ class Menu extends React.Component {
         open: false,
         actions: [
             {
-                name: 'Save changes',
-                icon: <Icon>publish</Icon>,
-                color: "green"
+                name: 'Bug report',
+                icon: <Icon>bug_report</Icon>,
+                color: 'green',
+                callback: () => {
+                    window.open('https://github.com/goolhanrry/geoviewer/issues/new');
+                    this.handleClose();
+                }
             },
             {
                 name: 'Edit data',
                 icon: <Icon>insert_chart</Icon>,
-                color: "blue",
+                color: 'blue',
                 callback: () => {
                     emitter.emit('closeAllController');
                     emitter.emit('openDataController');
@@ -41,7 +45,7 @@ class Menu extends React.Component {
             {
                 name: 'Configure layers',
                 icon: <Icon>layers</Icon>,
-                color: "yellow darken-1",
+                color: 'yellow darken-1',
                 callback: () => {
                     emitter.emit('closeAllController');
                     emitter.emit('openLayerController');
@@ -51,7 +55,7 @@ class Menu extends React.Component {
             {
                 name: 'Switch style',
                 icon: <Icon>brush</Icon>,
-                color: "red accent-2",
+                color: 'red accent-2',
                 callback: () => {
                     emitter.emit('closeAllController');
                     emitter.emit('openStyleController');
@@ -106,7 +110,7 @@ class Menu extends React.Component {
             <SpeedDial
                 style={styles.root}
                 open={this.state.open}
-                ariaLabel="Menu"
+                ariaLabel='Menu'
                 icon={<SpeedDialIcon icon={<Icon>menu</Icon>} openIcon={<Icon>clear</Icon>} />}
                 onMouseEnter={this.handleOpen}
                 onMouseLeave={this.handleClose}
