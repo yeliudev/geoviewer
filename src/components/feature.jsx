@@ -3,19 +3,23 @@
 import React from 'react';
 import M from 'materialize-css';
 
+import emitter from '@utils/events.utils';
+
 class Feature extends React.Component {
     state = {
         tapTarget: null
     }
 
     componentDidMount() {
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set anchor id
-            document.getElementsByClassName('MuiSpeedDial-fab')[0].setAttribute('id', 'menu');
-
+        // Bind event listener
+        this.displayFeatureListener = emitter.addListener('displayFeature', () => {
             // Initialize TapTarget
             var elems = document.querySelectorAll('.tap-target');
-            var tapTarget = M.TapTarget.init(elems)[0];
+            var tapTarget = M.TapTarget.init(elems, {
+                onClose: () => {
+                    emitter.emit('openMenu');
+                }
+            })[0];
 
             // Display feature
             tapTarget.open();
@@ -29,6 +33,9 @@ class Feature extends React.Component {
     componentWillUnmount() {
         // Destory TapTarget
         this.state.tapTarget.destory();
+
+        // Remove event listener
+        emitter.removeListener(this.openMenuListener);
     }
 
     render() {

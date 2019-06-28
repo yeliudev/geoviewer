@@ -80,12 +80,20 @@ class Menu extends React.Component {
     }
 
     componentDidMount() {
+        // Set anchor id
+        document.getElementsByClassName('MuiSpeedDial-fab')[0].setAttribute('id', 'menu');
+
         // Bind event listener
         this.openMenuListener = emitter.addListener('openMenu', () => {
             this.setState({
                 open: true
             });
         });
+
+        // Display feature
+        setTimeout(() => {
+            emitter.emit('displayFeature');
+        }, 800);
     }
 
     componentWillUnmount() {
