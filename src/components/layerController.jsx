@@ -26,7 +26,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import indigo from '@material-ui/core/colors/indigo';
 
 import emitter from '@utils/events.utils';
-import { datasets } from '@utils/dataset.utils';
+import request from '@utils/request.utils';
+import datasets from '@utils/dataset.utils';
 import '@styles/layerController.style.css';
 
 const theme = createMuiTheme({
@@ -91,7 +92,6 @@ const styles = {
 class LayerController extends React.Component {
     state = {
         open: false,
-        datasetList: [],
         selected: []
     }
 
@@ -102,25 +102,55 @@ class LayerController extends React.Component {
     }
 
     handleDatasetChange = (e) => {
-        this.setState({
-            selected: e.target.value
-        })
-    }
-
-    handleLayerListUpdate = (e) => {
-        [this.state.selected[e.oldIndex], this.state.selected[e.newIndex]] = [this.state.selected[e.newIndex], this.state.selected[e.oldIndex]];
-        this.setState({
-            selected: this.state.selected
-        })
-    }
-
-    componentDidMount() {
-        // Initialize dataset list
-        datasets.map(item => {
-            this.state.datasetList.push(item.name);
+        // Check if deleting dataset
+        var deleting = false;
+        this.state.selected.map(item => {
+            if (e.target.value.indexOf(item) === -1) {
+                emitter.emit('removeDataset', item);
+                deleting = true;
+            }
             return true;
         });
 
+        // Load dataset
+        if (!deleting && e.target.value.length) {
+            // Get dataset id
+            var id = e.target.value[e.target.value.length - 1];
+
+            // Display snackbar
+            emitter.emit('showSnackbar', 'default', `Downloading dataset '${id}'.`);
+
+            // Initiate request
+            request({
+                url: datasets[id].url,
+                method: datasets[id].method,
+                credentials: 'same-origin',
+                successCallback: (res) => {
+                    emitter.emit('displayDataset', id, datasets[id].type, res);
+                    emitter.emit('showSnackbar', 'success', `Dataset '${id}' download succeed.`);
+                }
+            });
+        }
+
+        // Save selected datasets
+        this.setState({
+            selected: e.target.value.reverse()
+        });
+    }
+
+    handleLayerListUpdate = (e) => {
+        // Update chips
+        [this.state.selected[e.oldIndex], this.state.selected[e.newIndex]] = [this.state.selected[e.newIndex], this.state.selected[e.oldIndex]];
+
+        // Move layer
+        emitter.emit('moveLayer', this.state.selected[e.oldIndex], this.state.selected[e.newIndex + 1]);
+
+        this.setState({
+            selected: this.state.selected
+        });
+    }
+
+    componentDidMount() {
         // Bind event listeners
         this.openLayerControllerListener = emitter.addListener('openLayerController', () => {
             this.setState({
@@ -188,7 +218,7 @@ class LayerController extends React.Component {
                                             <InputLabel style={styles.placeholder}>Choose datasets</InputLabel>
                                     )}
                                 >
-                                    {this.state.datasetList.map(item => (
+                                    {Object.keys(datasets).map(item => (
                                         <MenuItem key={item} value={item}>
                                             <Checkbox checked={this.state.selected.indexOf(item) > -1} color="primary" />
                                             <ListItemText primary={item} />

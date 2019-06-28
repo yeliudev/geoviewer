@@ -20,7 +20,7 @@ const parseUrl = (url, params) => {
 
 const request = (options) => {
     // Save parameters
-    var url = options.method === 'POST' ? options.url : parseUrl(options.url, options.params);
+    var url = options.method === 'GET' && options.params ? parseUrl(options.url, options.params) : options.url;
     options.successCallback = options.successCallback || (() => { });
     options.finallyCallback = options.finallyCallback || (() => { });
     options.errorCallback = options.errorCallback || ((err) => emitter.emit('showSnackbar', 'error', err.toString()));
@@ -36,10 +36,10 @@ const request = (options) => {
     fetch(url, {
         method: options.method,
         body: options.method === 'POST' ? JSON.stringify(options.params) : undefined,
-        credentials: 'include'
+        credentials: options.credentials || 'include'
     })
         .then(req => req.json())
-        .then(res => res.success ? options.successCallback(res) : options.failedCallback(res))
+        .then(res => res.hasOwnProperty('success') && !res.success ? options.failedCallback(res) : options.successCallback(res))
         .finally(options.finallyCallback)
         .catch(options.errorCallback);
 }

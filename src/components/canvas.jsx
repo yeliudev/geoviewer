@@ -172,6 +172,87 @@ class Canvas extends React.Component {
             });
         });
 
+        this.displayDatasetListener = emitter.addListener('displayDataset', (id, type, geometry) => {
+            // Remove last data source
+            if (this.state.map.getSource(id)) {
+                this.state.map.removeSource(id);
+            }
+
+            // Add new data source
+            this.state.map.addSource(id, {
+                'type': 'geojson',
+                'data': geometry
+            });
+
+            // Add layer
+            if (type === 'heatmap') {
+                this.state.map.addLayer({
+                    'id': id,
+                    'type': 'heatmap',
+                    'source': id,
+                    'paint': {
+                        'heatmap-weight': [
+                            'interpolate',
+                            ['linear'],
+                            ['get', 'mag'],
+                            10, 10,
+                            16, 16
+                        ],
+                        'heatmap-intensity': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            10, 10,
+                            19, 19
+                        ],
+                        'heatmap-color': [
+                            'interpolate',
+                            ['linear'],
+                            ['heatmap-density'],
+                            0, 'rgba(33,102,172,0)',
+                            0.2, 'rgb(103,169,207)',
+                            0.4, 'rgb(209,229,240)',
+                            0.6, 'rgb(253,219,199)',
+                            0.8, 'rgb(239,138,98)',
+                            1, 'rgb(178,24,43)'
+                        ],
+                        'heatmap-radius': [
+                            'interpolate',
+                            ['linear'],
+                            ['zoom'],
+                            10, 12,
+                            19, 30
+                        ]
+                    }
+                });
+            } else {
+                // Remove data source
+                this.state.map.removeSource(id);
+
+                // Display snackbar
+                emitter.emit('showSnackbar', 'error', `Dataset type '${type}' is not supported.`);
+            }
+        });
+
+        this.removeDatasetListener = emitter.addListener('removeDataset', e => {
+            // Return if layer not found
+            if (!this.state.map.getLayer(e)) {
+                return;
+            }
+
+            // Remove layer and data source
+            this.state.map.removeLayer(e);
+            this.state.map.removeSource(e);
+
+            // Display snackbar
+            emitter.emit('showSnackbar', 'success', `Dataset '${e}' remove succeed.'`);
+        });
+
+        this.moveLayerListener = emitter.addListener('moveLayer', (id, beforeId) => {
+            // Move layer
+            this.state.map.moveLayer(id, beforeId);
+        });
+
         this.displayTempLayerListener = emitter.addListener('displayTempLayer', e => {
             // Remove previews temp layer
             this.removeTempLayer();
@@ -232,6 +313,9 @@ class Canvas extends React.Component {
     componentWillUnmount() {
         // Remove event listeners
         emitter.removeListener(this.setMapStyleListener);
+        emitter.removeListener(this.displayDatasetListener);
+        emitter.removeListener(this.removeDatasetListener);
+        emitter.removeListener(this.moveLayerListener);
         emitter.removeListener(this.displayTempLayerListener);
         emitter.removeListener(this.removeTempLayerListener);
         emitter.removeListener(this.getPointListener);

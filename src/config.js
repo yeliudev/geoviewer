@@ -19,6 +19,12 @@ const SERVICE = {
         method: 'POST'
     },
 
+    // Dataset fetching interface
+    getDataset: {
+        url: `${API_ROOT}/getDataset`,
+        method: 'GET'
+    },
+
     // Spatial query interface
     search: {
         url: `${API_ROOT}/search`,
