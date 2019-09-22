@@ -3,7 +3,7 @@
 import React from 'react';
 import { withSnackbar } from 'notistack';
 
-import Button from '@material-ui/core/Button';
+import { Button } from '@material-ui/core';
 
 import emitter from '@utils/events.utils';
 import '@styles/snackbar.style.css';
@@ -35,9 +35,9 @@ class Snackbar extends React.Component {
             });
         });
 
-        this.showloggingSnackbarListener = emitter.addListener('showloggingSnackbar', (e) => {
+        this.showLoginingSnackbarListener = emitter.addListener('showLoginingSnackbar', e => {
             // Show persist snackbar
-            var message = `Logging to ${e}...`;
+            var message = `Logining to ${e}...`;
             var key = this.props.enqueueSnackbar(message, {
                 variant: 'info',
                 persist: true,
@@ -49,7 +49,7 @@ class Snackbar extends React.Component {
             });
         });
 
-        this.hideloggingSnackbarListener = emitter.addListener('hideloggingSnackbar', () => {
+        this.hideLoginingSnackbarListener = emitter.addListener('hideLoginingSnackbar', () => {
             // Hide persist snackbar
             this.props.closeSnackbar(this.state.key);
         });
@@ -58,8 +58,8 @@ class Snackbar extends React.Component {
     componentWillUnmount() {
         // Remove event listeners
         emitter.removeListener(this.showSnackbarListener);
-        emitter.removeListener(this.showloggingSnackbarListener);
-        emitter.removeListener(this.hideloggingSnackbarListener);
+        emitter.removeListener(this.showLoginingSnackbarListener);
+        emitter.removeListener(this.hideLoginingSnackbarListener);
     }
 
     render() {

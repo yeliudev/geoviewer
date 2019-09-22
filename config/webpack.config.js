@@ -273,7 +273,8 @@ module.exports = function (webpackEnv) {
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
         // Add links to paths
-        '@': path.resolve(__dirname, '../src'),
+        '@config': path.resolve(__dirname, '../src/config'),
+        '@serviceWorker': path.resolve(__dirname, '../src/serviceWorker'),
         '@components': path.resolve(__dirname, '../src/components'),
         '@pages': path.resolve(__dirname, '../src/pages'),
         '@plugins': path.resolve(__dirname, '../src/plugins'),

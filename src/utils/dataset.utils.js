@@ -1,6 +1,6 @@
 /* Written by Ye Liu */
 
-import { SERVICE } from '@/config';
+import { SERVICE } from '@config';
 
 const datasets = {
     'Province Capitals': {

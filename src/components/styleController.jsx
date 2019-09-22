@@ -2,13 +2,7 @@
 
 import React from 'react';
 
-import Slide from '@material-ui/core/Slide';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
+import { Slide, Card, CardContent, Typography, Grid, IconButton, Icon } from '@material-ui/core';
 
 import emitter from '@utils/events.utils';
 import { mapStyles } from '@utils/map.utils';
@@ -97,7 +91,7 @@ class StyleController extends React.Component {
                             {Object.keys(mapStyles).map((item, index) => {
                                 return (
                                     <Grid item style={styles.styleCard} key={index} xs={3}>
-                                        <img src={`./static/assets/${item}.png`} alt="" className="hoverable" style={styles.stylePreview} onClick={this.handleStyleClick.bind(this, item)} />
+                                        <img src={`./static/assets/${item.toLowerCase()}.png`} alt="" className="hoverable" style={styles.stylePreview} onClick={this.handleStyleClick.bind(this, item)} />
                                     </Grid>
                                 );
                             })}

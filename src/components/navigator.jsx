@@ -2,18 +2,13 @@
 
 import React from 'react';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import SvgIcon from '@material-ui/core/SvgIcon';
-import Icon from '@material-ui/core/Icon';
+import { AppBar, Toolbar, Tooltip, IconButton, SvgIcon, Icon } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import grey from '@material-ui/core/colors/grey';
+import { grey } from '@material-ui/core/colors';
 
 import emitter from '@utils/events.utils';
 import request from '@utils/request.utils';
-import { SERVICE } from '@/config';
+import { SERVICE } from '@config';
 
 const theme = createMuiTheme({
     palette: {

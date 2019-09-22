@@ -4,32 +4,14 @@ import React from 'react';
 import M from 'materialize-css';
 import MaterialTable, { MTableEditField } from 'material-table';
 
-import Slide from '@material-ui/core/Slide';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Popover from '@material-ui/core/Popover';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-import Collapse from '@material-ui/core/Collapse';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
+import { Slide, Card, CardContent, Popover, Grid, TextField, FormControl, FormControlLabel, Checkbox, CircularProgress, Divider, Collapse, Typography, Paper, InputBase, Tooltip, Button, IconButton, Icon } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import indigo from '@material-ui/core/colors/indigo';
+import { indigo } from '@material-ui/core/colors';
 
 import emitter from '@utils/events.utils';
 import request from '@utils/request.utils';
-import { checkEmptyObject } from '@utils/method.utils';
-import { ACCESS_TOKEN, SERVICE } from '@/config';
+import { isEmptyObject } from '@utils/validate.utils';
+import { ACCESS_TOKEN, SERVICE } from '@config';
 import '@styles/dataController.style.css';
 
 const theme = createMuiTheme({
@@ -490,7 +472,7 @@ class DataController extends React.Component {
             });
 
             // return if nothing to update
-            if (checkEmptyObject(params)) {
+            if (isEmptyObject(params)) {
                 emitter.emit('showSnackbar', 'default', 'Nothing to update.');
                 return;
             }

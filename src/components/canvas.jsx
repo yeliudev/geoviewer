@@ -7,12 +7,13 @@ import MapboxTraffic from '@mapbox/mapbox-gl-traffic';
 import MapboxDraw from '@mapbox/mapbox-gl-draw';
 import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 
-import emitter from '@utils/events.utils';
 import Minimap from '@plugins/minimap.plugin';
 import geocoder from '@plugins/geocoder.plugin';
-import pulsingDot from '@plugins/pulsingDot.plugin';
+import marker from '@plugins/marker.plugin';
+
+import emitter from '@utils/events.utils';
 import { mapStyles } from '@utils/map.utils';
-import { ACCESS_TOKEN } from '@/config';
+import { ACCESS_TOKEN } from '@config';
 import '@styles/map.style.css';
 
 const styles = {
@@ -258,8 +259,8 @@ class Canvas extends React.Component {
             this.removeTempLayer();
 
             // Add rendering resource
-            if (!this.state.map.hasImage('pulsing-dot')) {
-                this.state.map.addImage('pulsing-dot', pulsingDot, { pixelRatio: 3 });
+            if (!this.state.map.hasImage('marker')) {
+                this.state.map.addImage('marker', marker, { pixelRatio: 3 });
             }
 
             // Add point layer on map
@@ -271,7 +272,7 @@ class Canvas extends React.Component {
                     data: e.geometry
                 },
                 layout: {
-                    'icon-image': 'pulsing-dot'
+                    'icon-image': 'marker'
                 }
             });
 

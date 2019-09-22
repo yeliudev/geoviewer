@@ -3,19 +3,13 @@
 import React from 'react';
 import md5 from 'md5';
 
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Dialog, Slide, TextField, FormControlLabel, Checkbox, Button, CircularProgress } from '@material-ui/core';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import indigo from '@material-ui/core/colors/indigo';
+import { indigo } from '@material-ui/core/colors';
 
 import emitter from '@utils/events.utils';
 import request from '@utils/request.utils';
-import { SERVICE } from '@/config';
+import { SERVICE } from '@config';
 
 const theme = createMuiTheme({
     palette: {
@@ -100,12 +94,14 @@ class Login extends React.Component {
     }
 
     handleLoginClick = () => {
-        // Show button progress
+        var username = document.getElementById('username').value;
+
+        // Show logining progress
+        emitter.emit('showLoginingSnackbar', username);
         this.setState({
             logining: true
         });
 
-        var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
         password = password.substr(0, 5) === '$md5$' ? password.substr(5) : md5(password);
 
@@ -149,6 +145,7 @@ class Login extends React.Component {
                     })
                 }
 
+                emitter.emit('hideLoginingSnackbar');
                 this.setState({
                     logining: false
                 });

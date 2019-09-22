@@ -2,10 +2,8 @@
 
 import React from 'react';
 
-import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
-import Icon from '@material-ui/core/Icon';
+import { Icon } from '@material-ui/core';
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
 
 import emitter from '@utils/events.utils';
 import '@styles/menu.style.css';
@@ -16,6 +14,9 @@ const styles = {
         right: 24,
         bottom: 24,
         zIndex: 1000
+    },
+    fontIcon: {
+        color: 'white'
     }
 };
 
@@ -25,7 +26,7 @@ class Menu extends React.Component {
         actions: [
             {
                 name: 'Bug report',
-                icon: <Icon>bug_report</Icon>,
+                icon: <Icon style={styles.fontIcon}>bug_report</Icon>,
                 color: 'green',
                 callback: () => {
                     window.open('https://github.com/goolhanrry/geoviewer/issues/new');
@@ -34,7 +35,7 @@ class Menu extends React.Component {
             },
             {
                 name: 'Edit data',
-                icon: <Icon>insert_chart</Icon>,
+                icon: <Icon style={styles.fontIcon}>insert_chart</Icon>,
                 color: 'blue',
                 callback: () => {
                     emitter.emit('closeAllController');
@@ -44,7 +45,7 @@ class Menu extends React.Component {
             },
             {
                 name: 'Configure layers',
-                icon: <Icon>layers</Icon>,
+                icon: <Icon style={styles.fontIcon}>layers</Icon>,
                 color: 'yellow darken-1',
                 callback: () => {
                     emitter.emit('closeAllController');
@@ -54,7 +55,7 @@ class Menu extends React.Component {
             },
             {
                 name: 'Switch style',
-                icon: <Icon>brush</Icon>,
+                icon: <Icon style={styles.fontIcon}>brush</Icon>,
                 color: 'red accent-2',
                 callback: () => {
                     emitter.emit('closeAllController');

@@ -3,7 +3,7 @@
 // Mapbox-GL library access token
 const ACCESS_TOKEN = 'pk.eyJ1IjoiZ29vbGhhbnJyeSIsImEiOiJjanYxYWJtajgxOHphM3lteHh5dGNlcGdiIn0.ZL8sPakwzM68TeVwf2ntpA';
 
-// Server host URL
+// Server host url
 const API_ROOT = 'http://localhost:5757/api';
 
 const SERVICE = {
@@ -17,18 +17,6 @@ const SERVICE = {
     logout: {
         url: `${API_ROOT}/logout`,
         method: 'POST'
-    },
-
-    // Dataset fetching interface
-    getDataset: {
-        url: `${API_ROOT}/getDataset`,
-        method: 'GET'
-    },
-
-    // Spatial query interface
-    search: {
-        url: `${API_ROOT}/search`,
-        method: 'GET'
     },
 
     // Insert spatial object interface
@@ -47,6 +35,18 @@ const SERVICE = {
     delete: {
         url: `${API_ROOT}/delete`,
         method: 'POST'
+    },
+
+    // Dataset fetching interface
+    getDataset: {
+        url: `${API_ROOT}/getDataset`,
+        method: 'GET'
+    },
+
+    // Spatial query interface
+    search: {
+        url: `${API_ROOT}/search`,
+        method: 'GET'
     }
 }
 

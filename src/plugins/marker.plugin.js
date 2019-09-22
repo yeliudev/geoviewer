@@ -1,6 +1,6 @@
 /* Written by Ye Liu */
 
-const pulsingDot = {
+const marker = {
     width: 200,
     height: 200,
     data: new Uint8Array(200 * 200 * 4),
@@ -48,4 +48,4 @@ const pulsingDot = {
     }
 };
 
-export default pulsingDot;
+export default marker;
