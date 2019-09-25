@@ -33,7 +33,7 @@ class Canvas extends React.Component {
         popup: null,
         gettingPoint: null,
         tempId: null,
-        styleCode: mapStyles.Streets.substring(16)
+        styleCode: mapStyles.Basic.substring(16)
     }
 
     removeTempLayer = () => {
@@ -73,7 +73,7 @@ class Canvas extends React.Component {
         // Initialize map object
         var map = new mapboxgl.Map({
             container: 'map',
-            style: mapStyles.Streets,
+            style: mapStyles.Basic,
             center: [103.000, 35.000],
             zoom: 3
         });
@@ -88,7 +88,7 @@ class Canvas extends React.Component {
 
         // Add map controls
         var minimap = new Minimap({
-            center: [103.000, 35.000]
+            center: map.getCenter()
         });
 
         map.addControl(new MapboxGeocoder({

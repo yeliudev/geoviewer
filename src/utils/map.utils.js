@@ -1,7 +1,7 @@
 /* Written by Ye Liu */
 
 const mapStyles = {
-    Streets: 'mapbox://styles/goolhanrry/cjw8xh7e200781cnprhz1wdyv',
+    Basic: 'mapbox://styles/goolhanrry/ck0yxk7jb00qd1coixkprv90f',
     Outdoors: 'mapbox://styles/goolhanrry/cjw8xvtw001271do5wh8jcisr',
     Light: 'mapbox://styles/goolhanrry/cjw8xfxnz00ov1ctbo72e8tvq',
     Dark: 'mapbox://styles/goolhanrry/cjw8x7qcb036z1cpakzz43vsv',
