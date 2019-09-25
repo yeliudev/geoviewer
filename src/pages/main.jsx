@@ -12,8 +12,8 @@ import Feature from '@components/feature';
 import StyleController from '@components/styleController';
 import LayerController from '@components/layerController';
 import DataController from '@components/dataController';
-import Canvas from '@components/canvas';
 import Popup from '@components/popup';
+import Canvas from '@components/canvas';
 import '@styles/materialize.min.style.css';
 
 class Main extends React.Component {

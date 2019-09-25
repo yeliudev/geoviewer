@@ -64,8 +64,8 @@ class Popup extends React.Component {
             document.getElementById('popup-container').appendChild(el);
 
             // Load weather widget
-            var script = document.createElement("script");
-            script.type = "text/javascript";
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
             script.src = `https://darksky.net/widget/default-small/${e.geometry.geometry.coordinates[1].toString()},${e.geometry.geometry.coordinates[0].toString()}/ca12/en.js?height=60`;
             document.getElementById('customize-script-container').appendChild(script);
 
@@ -92,7 +92,7 @@ class Popup extends React.Component {
                     image={this.state.data.image && this.state.data.image.src ? this.state.data.image.src : '#'}
                 />
 
-                {/* Object Name */}
+                {/* Name */}
                 <CardContent style={this.state.data.introduction ? styles.titleContainer : styles.titleContainerEnd}>
                     <div style={styles.nameContainer}>
                         <Typography style={styles.popupName} variant="h5" component="h2">{this.state.data.name}</Typography>
@@ -101,7 +101,7 @@ class Popup extends React.Component {
                     <div id="customize-script-container" style={styles.weatherWidgetContainer}></div>
                 </CardContent>
 
-                {/* Object Introduction */}
+                {/* Introduction */}
                 <CardContent style={styles.introductionContainer} className={this.state.data.introduction ? null : 'hidden'}>
                     <Typography style={styles.popupIntroduction} variant="body2" color="textSecondary" component="p">{this.state.data.introduction}</Typography>
                 </CardContent>
