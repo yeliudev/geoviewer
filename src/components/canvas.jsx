@@ -36,6 +36,44 @@ class Canvas extends React.Component {
         styleCode: Object.values(mapStyles)[0].substring(16)
     }
 
+    add3dLayer = () => {
+        var layers = this.state.map.getStyle().layers;
+        for (var layer in layers) {
+            if (layer.type === 'symbol' && layer.layout['text-field']) {
+                var labelLayerId = layer.id;
+                break;
+            }
+        }
+
+        if (this.state.map.getLayer('3d-buildings')) {
+            this.state.map.moveLayer('3d-buildings', labelLayerId);
+            return;
+        }
+
+        this.state.map.addLayer({
+            'id': '3d-buildings',
+            'source': 'composite',
+            'source-layer': 'building',
+            'filter': ['==', 'extrude', 'true'],
+            'type': 'fill-extrusion',
+            'minzoom': 12,
+            'paint': {
+                'fill-extrusion-color': '#aaa',
+                'fill-extrusion-height': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "height"]
+                ],
+                'fill-extrusion-base': [
+                    "interpolate", ["linear"], ["zoom"],
+                    15, 0,
+                    15.05, ["get", "min_height"]
+                ],
+                'fill-extrusion-opacity': .6
+            }
+        }, labelLayerId);
+    }
+
     removeTempLayer = () => {
         // Remove layers
         var layers = this.state.map.getStyle().layers;
@@ -87,9 +125,8 @@ class Canvas extends React.Component {
         });
 
         // Add map controls
-        var center = map.getCenter();
         var minimap = new Minimap({
-            center: [center.lng, center.lat]
+            center: map.getCenter()
         });
 
         map.addControl(new MapboxGeocoder({
@@ -115,21 +152,18 @@ class Canvas extends React.Component {
             anchor: 'bottom'
         }).setHTML('<div id="popup-container"></div>');
 
-        // Set state
-        this.setState({
-            map: map,
-            draw: draw,
-            minimap: minimap,
-            popup: popup
-        });
-
-        // Recover search box style
+        // Cover search box style
         document.getElementsByClassName('mapboxgl-ctrl-geocoder--input')[0].setAttribute('type', 'search-box');
 
         // Bind event listeners
         map.on('load', () => {
             // Hide loader
             document.getElementById('loader-wrapper').classList.add('loaded');
+        });
+
+        map.on('style.load', () => {
+            // Add 3D building layer
+            this.add3dLayer();
         });
 
         map.on('draw.create', e => {
@@ -309,6 +343,14 @@ class Canvas extends React.Component {
         this.removeTempPointListener = emitter.addListener('removeTempPoint', () => {
             // Remove temp point
             this.removeTempPoint();
+        });
+
+        // Set state
+        this.setState({
+            map: map,
+            draw: draw,
+            minimap: minimap,
+            popup: popup
         });
     }
 

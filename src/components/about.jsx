@@ -37,9 +37,9 @@ class About extends React.Component {
                         <a href="https://yeliu.me">Ye Liu</a>.
                     </p>
                     <p>
-                        Source code licensed&nbsp;
-                        <a href="https://opensource.org/licenses/mit-license.php">MIT</a>.
-                        Website content licensed&nbsp;
+                        Source code licensed under the&nbsp;
+                        <a href="https://opensource.org/licenses/mit-license.php">MIT License</a>.
+                        Website content licensed under&nbsp;
                         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
                     </p>
                 </div>
