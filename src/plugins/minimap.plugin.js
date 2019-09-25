@@ -6,7 +6,7 @@ import { mapStyles } from '@utils/map.utils';
 
 Minimap.prototype = Object.assign({}, mapboxgl.NavigationControl.prototype, {
     options: {
-        style: mapStyles.Streets,
+        style: Object.values(mapStyles)[0],
         center: [0, 0]
     },
 
