@@ -225,7 +225,6 @@ module.exports = function (webpackEnv) {
         ...(modules.webpackAliases || {}),
         // Add links to paths
         '@config': path.resolve(__dirname, '../src/config'),
-        '@serviceWorker': path.resolve(__dirname, '../src/serviceWorker'),
         '@components': path.resolve(__dirname, '../src/components'),
         '@pages': path.resolve(__dirname, '../src/pages'),
         '@plugins': path.resolve(__dirname, '../src/plugins'),
