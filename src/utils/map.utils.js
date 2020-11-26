@@ -1,14 +1,14 @@
 /* Written by Ye Liu */
 
 const mapStyles = {
-    Basic: 'mapbox://styles/yliudev/ckfevhte00nwj19qpjsituvh9',
-    Outdoors: 'mapbox://styles/yliudev/ckfevk9rn0o1719oegzh653xk',
-    Light: 'mapbox://styles/yliudev/ckfevipxf0fip19s0czuk30qi',
-    Dark: 'mapbox://styles/yliudev/ckfevi2se0o2m1apilmluij9g',
-    Night: 'mapbox://styles/yliudev/ckfevjtaa0o3h1anrp7zbq1ky',
-    LeShine: 'mapbox://styles/yliudev/ckfeviay50fia19s00nyaitzi',
-    NorthStar: 'mapbox://styles/yliudev/ckfevk27r0o0y19oekx967qa8',
-    Moonlight: 'mapbox://styles/yliudev/ckfevj4hw0o1h19o8ew2vgrva'
+    Basic: 'mapbox://styles/yliudev/ckhyxq27v1gtd19p5uyc5nfij',
+    Outdoors: 'mapbox://styles/yliudev/ckhyxu293294n19mtign8c6t3',
+    Light: 'mapbox://styles/yliudev/ckhyxr3zd292019mt5lpygcw4',
+    Dark: 'mapbox://styles/yliudev/ckhyxroej29mg19no822l0aur',
+    Night: 'mapbox://styles/yliudev/ckhyxst9k29au19mxy9qekzqt',
+    Standard: 'mapbox://styles/yliudev/ckhyxwze829b919o25jfyhqah',
+    Blueprint: 'mapbox://styles/yliudev/ckhyxxxfh29c419o2scpgmje1',
+    Decimal: 'mapbox://styles/yliudev/ckhyxw8ga29bt19qiioxpkdhh'
 };
 
 const buildHeatmapStyle = (color) => {
