@@ -11,8 +11,8 @@ class About extends React.Component {
     componentDidMount() {
         // Initialize Modal
         document.addEventListener('DOMContentLoaded', () => {
-            var elem = document.getElementById('about');
-            var modal = M.Modal.init(elem);
+            const elem = document.getElementById('about');
+            const modal = M.Modal.init(elem);
             this.setState({
                 modal: modal
             });
@@ -37,9 +37,9 @@ class About extends React.Component {
                         <a href="https://yeliu.me">Ye Liu</a>.
                     </p>
                     <p>
-                        Source code licensed under the&nbsp;
+                        Source code is licensed under the&nbsp;
                         <a href="https://opensource.org/licenses/mit-license.php">MIT License</a>.
-                        Website content licensed under&nbsp;
+                        Website content is licensed under&nbsp;
                         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a>.
                     </p>
                 </div>

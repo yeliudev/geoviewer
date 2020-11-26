@@ -25,11 +25,11 @@ class Menu extends React.Component {
         open: false,
         actions: [
             {
-                name: 'Bug report',
+                name: 'Report bugs',
                 icon: <Icon style={styles.fontIcon}>bug_report</Icon>,
                 color: 'green',
                 callback: () => {
-                    window.open('https://github.com/goolhanrry/geoviewer/issues/new');
+                    window.open('https://github.com/yeliudev/geoviewer/issues/new');
                     this.handleClose();
                 }
             },
@@ -68,7 +68,7 @@ class Menu extends React.Component {
 
     handleClick = () => {
         this.setState(state => ({
-            open: !state.open,
+            open: !state.open
         }));
     }
 

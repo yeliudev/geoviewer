@@ -10,7 +10,7 @@ import { indigo } from '@material-ui/core/colors';
 
 import emitter from '@utils/events.utils';
 import request from '@utils/request.utils';
-import { isEmptyObject } from '@utils/validate.utils';
+import { isEmptyObject } from '@utils/validation.utils';
 import { ACCESS_TOKEN, SERVICE } from '@config';
 import '@styles/dataController.style.css';
 
@@ -161,7 +161,7 @@ const styles = {
         top: '50%',
         left: '50%',
         marginTop: -12,
-        marginLeft: -12,
+        marginLeft: -12
     }
 };
 
@@ -204,7 +204,7 @@ class DataController extends React.Component {
     }
 
     initMaterialbox = () => {
-        var elems = document.querySelectorAll('.materialboxed');
+        const elems = document.querySelectorAll('.materialboxed');
         M.Materialbox.init(elems, {
             onOpenStart: (e) => {
                 e.parentNode.style.overflow = 'visible';
@@ -275,7 +275,7 @@ class DataController extends React.Component {
 
         // Check image size (smaller than 1MB)
         if (e.target.files[0].size > 1048576) {
-            emitter.emit('showSnackbar', 'error', 'Error: Image must be smaller than 1MB.');
+            emitter.emit('showSnackbar', 'error', 'Image must be smaller than 1MB.');
             return;
         }
 
@@ -318,7 +318,7 @@ class DataController extends React.Component {
 
         // Check whether at least one option checked
         if (!flag) {
-            emitter.emit('showSnackbar', 'error', 'Error: Please select at least one option.');
+            emitter.emit('showSnackbar', 'error', 'Please select at least one option.');
             option.checked = true;
             return;
         }
@@ -333,7 +333,7 @@ class DataController extends React.Component {
         this.handleCancelClick();
 
         // Get keyword
-        var keyword = document.getElementById('search-box').value;
+        const keyword = document.getElementById('search-box').value;
         if (!keyword) {
             return;
         }
@@ -344,19 +344,19 @@ class DataController extends React.Component {
         });
 
         // Get search options
-        var options = {};
+        const options = {};
         this.state.searchOptions.map(item => {
             options[item.value] = item.checked;
             return true;
         });
 
-        // Initiate request
+        // Initialize request
         request({
             url: SERVICE.search.url,
             method: SERVICE.search.method,
             params: {
                 keyword: keyword,
-                options: JSON.stringify(options)
+                ...options
             },
             successCallback: (res) => {
                 // Display data
@@ -399,7 +399,7 @@ class DataController extends React.Component {
         });
 
         // Generate request parameters
-        var params = {
+        const params = {
             name: document.getElementById('name').value,
             pinyin: document.getElementById('pinyin').value,
             introduction: document.getElementById('introduction').value,
@@ -407,14 +407,14 @@ class DataController extends React.Component {
             geometry: this.state.geometry
         };
 
-        // Initiate request
+        // Initialize request
         request({
             url: SERVICE.insert.url,
             method: SERVICE.insert.method,
             params: params,
             successCallback: (res) => {
                 // Show snackbar
-                emitter.emit('showSnackbar', 'success', `Insert new object with Gid = '${res.gid}' successfully.`);
+                emitter.emit('showSnackbar', 'success', `Inserted new object with Gid = '${res.gid}' successfully.`);
 
                 this.handleCancelClick();
             },
@@ -454,7 +454,7 @@ class DataController extends React.Component {
             }
 
             // Generate request parameters
-            var params = {
+            const params = {
                 gid: oldData.gid
             };
 
@@ -477,18 +477,17 @@ class DataController extends React.Component {
                 return;
             }
 
-            // Initiate request
+            // Initialize request
             request({
                 url: SERVICE.update.url,
                 method: SERVICE.update.method,
                 params: params,
                 successCallback: (res) => {
                     // Show success snackbar
-                    var message = `Update ${res.count} ${res.count > 1 ? 'objects' : 'object'} successfully.`;
-                    emitter.emit('showSnackbar', 'success', message);
+                    emitter.emit('showSnackbar', 'success', `Updated ${res.count} ${res.count > 1 ? 'objects' : 'object'} successfully.`);
 
                     // Refresh table
-                    var data = this.state.data;
+                    const data = this.state.data;
                     data[data.indexOf(oldData)] = newData;
                     this.setState({
                         data: data
@@ -507,7 +506,7 @@ class DataController extends React.Component {
 
     handleRowDelete = (oldData) => {
         return new Promise(resolve => {
-            // Initiate request
+            // Initialize request
             request({
                 url: SERVICE.delete.url,
                 method: SERVICE.delete.method,
@@ -516,11 +515,10 @@ class DataController extends React.Component {
                 },
                 successCallback: (res) => {
                     // Show success snackbar
-                    var message = `Delete ${res.count} ${res.count > 1 ? 'objects' : 'object'} successfully.`;
-                    emitter.emit('showSnackbar', 'success', message);
+                    emitter.emit('showSnackbar', 'success', `Deleted ${res.count} ${res.count > 1 ? 'objects' : 'object'} successfully.`);
 
                     // Refresh table
-                    var data = [...this.state.data];
+                    const data = [...this.state.data];
                     data.splice(data.indexOf(oldData), 1);
                     this.setState({ ...this.state, data });
                 },
@@ -540,17 +538,17 @@ class DataController extends React.Component {
 
     componentDidMount() {
         // Initialize popover
-        var anchorEl = document.getElementById('anchorEl');
+        const anchorEl = document.getElementById('anchorEl');
 
         // Initialize file reader
-        var reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = (e) => {
             // Get image info
-            var image = new Image();
+            const image = new Image();
             image.src = e.target.result;
 
             // Construct preview image object
-            var previewImage = {
+            const previewImage = {
                 longitude: image.height > image.width,
                 src: e.target.result
             }
@@ -580,8 +578,8 @@ class DataController extends React.Component {
         });
 
         this.updatePointListener = emitter.addListener('setPoint', (feature, styleCode, zoom) => {
-            var [lng, lat] = feature.geometry.coordinates;
-            var previewMapUrl = `https://api.mapbox.com/styles/v1/${styleCode}/static/pin-s+f00(${lng},${lat})/${lng},${lat},${zoom},0,1/250x155@2x?access_token=${ACCESS_TOKEN}`;
+            const [lng, lat] = feature.geometry.coordinates;
+            const previewMapUrl = `https://api.mapbox.com/styles/v1/${styleCode}/static/pin-s+f00(${lng},${lat})/${lng},${lat},${zoom},0,1/250x155@2x?access_token=${ACCESS_TOKEN}`;
 
             this.setState({
                 addPointUnwrap: true,
@@ -603,7 +601,7 @@ class DataController extends React.Component {
         emitter.removeListener(this.updatePointListener);
 
         // Destory Materialbox
-        var elems = document.querySelectorAll('.materialboxed');
+        const elems = document.querySelectorAll('.materialboxed');
         elems.map(elem => elem.destory());
     }
 

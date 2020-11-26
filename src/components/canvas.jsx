@@ -12,7 +12,7 @@ import geocoder from '@plugins/geocoder.plugin';
 import marker from '@plugins/marker.plugin';
 
 import emitter from '@utils/events.utils';
-import { mapStyles } from '@utils/map.utils';
+import { mapStyles, buildHeatmapStyle } from '@utils/map.utils';
 import { ACCESS_TOKEN } from '@config';
 import '@styles/map.style.css';
 
@@ -21,7 +21,7 @@ const styles = {
         width: '100%',
         position: 'fixed',
         top: 64,
-        bottom: 0,
+        bottom: 0
     }
 };
 
@@ -36,47 +36,9 @@ class Canvas extends React.Component {
         styleCode: Object.values(mapStyles)[0].substring(16)
     }
 
-    add3dLayer = () => {
-        var layers = this.state.map.getStyle().layers;
-        for (var layer in layers) {
-            if (layer.type === 'symbol' && layer.layout['text-field']) {
-                var labelLayerId = layer.id;
-                break;
-            }
-        }
-
-        if (this.state.map.getLayer('3d-buildings')) {
-            this.state.map.moveLayer('3d-buildings', labelLayerId);
-            return;
-        }
-
-        this.state.map.addLayer({
-            'id': '3d-buildings',
-            'source': 'composite',
-            'source-layer': 'building',
-            'filter': ['==', 'extrude', 'true'],
-            'type': 'fill-extrusion',
-            'minzoom': 12,
-            'paint': {
-                'fill-extrusion-color': '#aaa',
-                'fill-extrusion-height': [
-                    "interpolate", ["linear"], ["zoom"],
-                    15, 0,
-                    15.05, ["get", "height"]
-                ],
-                'fill-extrusion-base': [
-                    "interpolate", ["linear"], ["zoom"],
-                    15, 0,
-                    15.05, ["get", "min_height"]
-                ],
-                'fill-extrusion-opacity': .6
-            }
-        }, labelLayerId);
-    }
-
     removeTempLayer = () => {
         // Remove layers
-        var layers = this.state.map.getStyle().layers;
+        const layers = this.state.map.getStyle().layers;
         layers.map(layer => {
             if (layer.id === 'custom-temp-point') {
                 this.state.map.removeLayer('custom-temp-point');
@@ -109,15 +71,16 @@ class Canvas extends React.Component {
         }
 
         // Initialize map object
-        var map = new mapboxgl.Map({
+        const map = new mapboxgl.Map({
             container: 'map',
             style: Object.values(mapStyles)[0],
             center: [103.000, 35.000],
-            zoom: 3
+            zoom: 3,
+            antialias: true
         });
 
         // Initialize map draw plugin
-        var draw = new MapboxDraw({
+        const draw = new MapboxDraw({
             controls: {
                 combine_features: false,
                 uncombine_features: false
@@ -125,7 +88,7 @@ class Canvas extends React.Component {
         });
 
         // Add map controls
-        var minimap = new Minimap({
+        const minimap = new Minimap({
             center: map.getCenter()
         });
 
@@ -147,7 +110,7 @@ class Canvas extends React.Component {
         map.addControl(minimap, 'bottom-left');
 
         // Initialize popup
-        var popup = new mapboxgl.Popup({
+        const popup = new mapboxgl.Popup({
             closeButton: false,
             anchor: 'bottom'
         }).setHTML('<div id="popup-container"></div>');
@@ -159,11 +122,6 @@ class Canvas extends React.Component {
         map.on('load', () => {
             // Hide loader
             document.getElementById('loader-wrapper').classList.add('loaded');
-        });
-
-        map.on('style.load', () => {
-            // Add 3D building layer
-            this.add3dLayer();
         });
 
         map.on('draw.create', e => {
@@ -195,12 +153,12 @@ class Canvas extends React.Component {
             this.state.map.setStyle(mapStyles[e]);
 
             // Set minimap style
-            var minimap = new Minimap({
+            const minimap = new Minimap({
                 center: this.state.map.getCenter(),
                 style: mapStyles[e]
             });
-            map.removeControl(this.state.minimap);
-            map.addControl(minimap, 'bottom-left');
+            this.state.map.removeControl(this.state.minimap);
+            this.state.map.addControl(minimap, 'bottom-left');
 
             this.setState({
                 minimap: minimap,
@@ -208,7 +166,7 @@ class Canvas extends React.Component {
             });
         });
 
-        this.displayDatasetListener = emitter.addListener('displayDataset', (id, type, geometry) => {
+        this.displayDatasetListener = emitter.addListener('displayDataset', (id, geometry, color) => {
             // Remove last data source
             if (this.state.map.getSource(id)) {
                 this.state.map.removeSource(id);
@@ -221,53 +179,12 @@ class Canvas extends React.Component {
             });
 
             // Add layer
-            if (type === 'heatmap') {
-                this.state.map.addLayer({
-                    'id': id,
-                    'type': 'heatmap',
-                    'source': id,
-                    'paint': {
-                        'heatmap-weight': [
-                            'interpolate',
-                            ['linear'],
-                            ['get', 'mag'],
-                            10, 10,
-                            16, 16
-                        ],
-                        'heatmap-intensity': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            10, 10,
-                            19, 19
-                        ],
-                        'heatmap-color': [
-                            'interpolate',
-                            ['linear'],
-                            ['heatmap-density'],
-                            0, 'rgba(33,102,172,0)',
-                            0.2, 'rgb(103,169,207)',
-                            0.4, 'rgb(209,229,240)',
-                            0.6, 'rgb(253,219,199)',
-                            0.8, 'rgb(239,138,98)',
-                            1, 'rgb(178,24,43)'
-                        ],
-                        'heatmap-radius': [
-                            'interpolate',
-                            ['linear'],
-                            ['zoom'],
-                            10, 12,
-                            19, 30
-                        ]
-                    }
-                });
-            } else {
-                // Remove data source
-                this.state.map.removeSource(id);
-
-                // Display snackbar
-                emitter.emit('showSnackbar', 'error', `Dataset type '${type}' is not supported.`);
-            }
+            this.state.map.addLayer({
+                'id': id,
+                'type': 'heatmap',
+                'source': id,
+                'paint': buildHeatmapStyle(color)
+            });
         });
 
         this.removeDatasetListener = emitter.addListener('removeDataset', e => {
@@ -279,14 +196,15 @@ class Canvas extends React.Component {
             // Remove layer and data source
             this.state.map.removeLayer(e);
             this.state.map.removeSource(e);
-
-            // Display snackbar
-            emitter.emit('showSnackbar', 'success', `Dataset '${e}' remove succeed.'`);
         });
 
         this.moveLayerListener = emitter.addListener('moveLayer', (id, beforeId) => {
             // Move layer
-            this.state.map.moveLayer(id, beforeId);
+            if (beforeId) {
+                this.state.map.moveLayer(id, beforeId);
+            } else {
+                this.state.map.moveLayer(id);
+            }
         });
 
         this.displayTempLayerListener = emitter.addListener('displayTempLayer', e => {

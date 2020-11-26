@@ -37,7 +37,8 @@ const styles = {
         marginTop: 15
     },
     checkBox: {
-        width: 140
+        width: 150,
+        margin: '5px 0 -5px'
     },
     loginBtnContainer: {
         display: 'inline-block',
@@ -52,7 +53,7 @@ const styles = {
         top: '50%',
         left: '50%',
         marginTop: -3,
-        marginLeft: -12,
+        marginLeft: -12
     }
 };
 
@@ -64,9 +65,9 @@ class Login extends React.Component {
     state = {
         open: false,
         remember: false,
-        logining: false,
-        username: null,
-        password: null
+        processing: false,
+        username: '',
+        password: ''
     }
 
     handleLoginClose = () => {
@@ -94,31 +95,31 @@ class Login extends React.Component {
     }
 
     handleLoginClick = () => {
-        var username = document.getElementById('username').value;
+        const username = document.getElementById('username').value;
 
-        // Show logining progress
-        emitter.emit('showLoginingSnackbar', username);
+        // Show logging in progress
+        emitter.emit('showLoggingInSnackbar', username);
         this.setState({
-            logining: true
+            processing: true
         });
 
         var password = document.getElementById('password').value;
         password = password.substr(0, 5) === '$md5$' ? password.substr(5) : md5(password);
 
         // Generate request parameters
-        var params = {
+        const params = {
             username: username,
             password: password
         };
 
-        // Initiate request
+        // Initialize request
         request({
             url: SERVICE.login.url,
             method: SERVICE.login.method,
             params: params,
             successCallback: (res) => {
                 // Show snackbar
-                emitter.emit('showSnackbar', 'success', `User '${res.user}' login successfully.`);
+                emitter.emit('showSnackbar', 'success', `User '${res.user}' logged in successfully.`);
 
                 // Switch login icon
                 emitter.emit('setLoginState', true);
@@ -140,14 +141,14 @@ class Login extends React.Component {
                     localStorage.removeItem('password');
 
                     this.setState({
-                        username: null,
-                        password: null
+                        username: '',
+                        password: ''
                     })
                 }
 
                 emitter.emit('hideLoginingSnackbar');
                 this.setState({
-                    logining: false
+                    processing: false
                 });
             }
         });
@@ -181,7 +182,7 @@ class Login extends React.Component {
             <MuiThemeProvider theme={theme}>
                 <Dialog open={this.state.open} TransitionComponent={Transition} onClose={this.handleLoginClose}>
                     <div style={styles.loginContainer}>
-                        <img style={styles.logo} src="./static/assets/logo-circle.png" alt="" />
+                        <img style={styles.logo} src="static/assets/logo-circle.png" alt="" />
                         <TextField
                             style={styles.inputBox}
                             variant="outlined"
@@ -214,8 +215,8 @@ class Login extends React.Component {
                             label="Remember me"
                         />
                         <div style={styles.loginBtnContainer}>
-                            <Button style={styles.loginBtn} variant="contained" color="primary" disabled={this.state.logining} onClick={this.handleLoginClick}>LOGIN</Button>
-                            {this.state.logining && <CircularProgress style={styles.loginBtnProgress} size={24} />}
+                            <Button style={styles.loginBtn} variant="contained" color="primary" disabled={this.state.processing} onClick={this.handleLoginClick}>LOGIN</Button>
+                            {this.state.processing && <CircularProgress style={styles.loginBtnProgress} size={24} />}
                         </div>
                     </div>
                 </Dialog>

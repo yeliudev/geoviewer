@@ -11,10 +11,10 @@ Minimap.prototype = Object.assign({}, mapboxgl.NavigationControl.prototype, {
     },
 
     onAdd: function (parentMap) {
-        this._container = this._createContainer(parentMap);
-        this._parentMap = parentMap;
+        this._container = this.createContainer(parentMap);
+        this.parentMap = parentMap;
 
-        this._miniMap = new mapboxgl.Map({
+        this.miniMap = new mapboxgl.Map({
             attributionControl: false,
             container: this._container,
             style: this.options.style,
@@ -22,180 +22,169 @@ Minimap.prototype = Object.assign({}, mapboxgl.NavigationControl.prototype, {
             zoom: 0
         });
 
-        this._miniMap.on('load', this._load.bind(this));
-
+        this.miniMap.on('load', this.load.bind(this));
         return this._container;
     },
 
-    _createContainer: function (parentMap) {
-        var container = document.createElement('div');
+    createContainer: function (parentMap) {
+        const container = document.createElement('div');
 
         container.id = 'minimap';
         container.className = 'mapboxgl-ctrl mapboxgl-ctrl-minimap';
-        container.addEventListener('contextmenu', this._preventDefault);
+        container.addEventListener('contextmenu', this.preventDefault);
 
         parentMap.getContainer().appendChild(container);
-
         return container;
     },
 
-    _preventDefault: function (e) {
+    preventDefault: function (e) {
         e.preventDefault();
     },
 
-    _load: function () {
-        this._zoomAdjust();
+    load: function () {
+        this.zoomAdjust();
 
         ['dragPan', 'boxZoom', 'dragRotate', 'keyboard', 'doubleClickZoom', 'touchZoomRotate'].map(item => {
-            this._miniMap[item].disable();
+            this.miniMap[item].disable();
             return true;
         });
 
-        var bounds = this._miniMap.getBounds();
-        this._convertBoundsToPoints(bounds);
+        const bounds = this.miniMap.getBounds();
+        this.convertBoundsToPoints(bounds);
 
-        this._miniMap.addSource('trackingRect', {
+        this.miniMap.addSource('trackingRect', {
             'type': 'geojson',
             'data': {
                 'type': 'Feature',
-                'properties': {
-                    'name': 'trackingRect'
-                },
-                'geometry': {
-                    'type': 'Polygon',
-                    'coordinates': this._trackingRectCoordinates
-                }
+                'properties': { 'name': 'trackingRect' },
+                'geometry': { 'type': 'Polygon', 'coordinates': this.trackingRectCoordinates }
             }
         });
 
-        this._miniMap.addLayer({
+        this.miniMap.addLayer({
             'id': 'trackingRectOutline',
             'type': 'line',
             'source': 'trackingRect',
             'layout': {},
-            'paint': {
-                'line-color': '#08F',
-                'line-width': 1,
-                'line-opacity': 1
-            }
+            'paint': { 'line-color': '#08F', 'line-width': 1, 'line-opacity': 1 }
         });
 
-        this._miniMap.addLayer({
+        this.miniMap.addLayer({
             'id': 'trackingRectFill',
             'type': 'fill',
             'source': 'trackingRect',
             'layout': {},
-            'paint': {
-                'fill-color': '#08F',
-                'fill-opacity': 0.25
-            }
+            'paint': { 'fill-color': '#08F', 'fill-opacity': 0.25 }
         });
 
-        this._trackingRect = this._miniMap.getSource('trackingRect');
+        this.trackingRect = this.miniMap.getSource('trackingRect');
 
-        this._parentMap.on('move', this._update.bind(this));
-        this._parentMap.on('zoom', this._zoomAdjust.bind(this));
+        this.parentMap.on('move', this.update.bind(this));
+        this.parentMap.on('zoom', this.zoomAdjust.bind(this));
 
-        this._miniMap.on('mousemove', this._mouseMove.bind(this));
-        this._miniMap.on('mousedown', this._mouseDown.bind(this));
-        this._miniMap.on('mouseup', this._mouseUp.bind(this));
+        this.miniMap.on('mousemove', this.mouseMove.bind(this));
+        this.miniMap.on('mousedown', this.mouseDown.bind(this));
+        this.miniMap.on('mouseup', this.mouseUp.bind(this));
 
-        this._miniMap.on('touchmove', this._mouseMove.bind(this));
-        this._miniMap.on('touchstart', this._mouseDown.bind(this));
-        this._miniMap.on('touchend', this._mouseUp.bind(this));
+        this.miniMap.on('touchmove', this.mouseMove.bind(this));
+        this.miniMap.on('touchstart', this.mouseDown.bind(this));
+        this.miniMap.on('touchend', this.mouseUp.bind(this));
 
-        this._miniMapCanvas = this._miniMap.getCanvasContainer();
-        this._miniMapCanvas.addEventListener('wheel', this._preventDefault);
-        this._miniMapCanvas.addEventListener('mousewheel', this._preventDefault);
+        this.miniMapCanvas = this.miniMap.getCanvasContainer();
+        this.miniMapCanvas.addEventListener('wheel', this.preventDefault);
+        this.miniMapCanvas.addEventListener('mousewheel', this.preventDefault);
 
-        this._update();
+        this.update();
     },
 
-    _mouseDown: function (e) {
-        if (this._isCursorOverFeature) {
-            this._isDragging = true;
-            this._previousPoint = this._currentPoint;
-            this._currentPoint = [e.lngLat.lng, e.lngLat.lat];
+    mouseDown: function (e) {
+        if (this.cursorOverFeature) {
+            this.dragging = true;
+            this.previousPoint = this.currentPoint;
+            this.currentPoint = [e.lngLat.lng, e.lngLat.lat];
         }
     },
 
-    _mouseUp: function () {
-        this._isDragging = false;
-        this._ticking = false;
+    mouseUp: function () {
+        this.dragging = false;
+        this.ticking = false;
     },
 
-    _mouseMove: function (e) {
-        this._ticking = false;
+    mouseMove: function (e) {
+        this.ticking = false;
 
-        var features = this._miniMap.queryRenderedFeatures(e.point, {
+        const features = this.miniMap.queryRenderedFeatures(e.point, {
             layers: ['trackingRectFill']
         });
 
-        if (!this._isCursorOverFeature || features.length <= 0) {
-            this._isCursorOverFeature = features.length > 0;
-            this._miniMapCanvas.style.cursor = this._isCursorOverFeature ? 'move' : '';
+        if (!this.cursorOverFeature || features.length <= 0) {
+            this.cursorOverFeature = features.length > 0;
+            this.miniMapCanvas.style.cursor = this.cursorOverFeature ? 'move' : '';
         }
 
-        if (this._isDragging) {
-            this._previousPoint = this._currentPoint;
-            this._currentPoint = [e.lngLat.lng, e.lngLat.lat];
+        if (this.dragging) {
+            this.previousPoint = this.currentPoint;
+            this.currentPoint = [e.lngLat.lng, e.lngLat.lat];
 
-            var offset = [this._currentPoint[0] - this._previousPoint[0], this._currentPoint[1] - this._previousPoint[1]];
-            var newBounds = this._moveTrackingRect(offset);
+            const offset = [this.currentPoint[0] - this.previousPoint[0], this.currentPoint[1] - this.previousPoint[1]];
+            const newBounds = this.moveTrackingRect(offset);
 
-            this._parentMap.fitBounds(newBounds, {
+            newBounds._ne.lat = Math.max(Math.min(newBounds._ne.lat, Math.max(-90, 90)), Math.min(-90, 90));
+            newBounds._sw.lat = Math.max(Math.min(newBounds._sw.lat, Math.max(-90, 90)), Math.min(-90, 90));
+
+            this.parentMap.fitBounds(newBounds, {
                 duration: 80,
                 noMoveStart: true
             });
         }
     },
 
-    _moveTrackingRect: function (offset) {
-        var bounds = this._trackingRect._data.properties.bounds;
+    moveTrackingRect: function (offset) {
+        const bounds = this.trackingRect._data.properties.bounds;
 
         bounds._ne.lng += offset[0];
         bounds._ne.lat += offset[1];
         bounds._sw.lng += offset[0];
         bounds._sw.lat += offset[1];
 
-        this._convertBoundsToPoints(bounds);
-        this._trackingRect.setData(this._trackingRect._data);
+        this.convertBoundsToPoints(bounds);
+        this.trackingRect.setData(this.trackingRect._data);
 
         return bounds;
     },
 
-    _setTrackingRectBounds: function (bounds) {
-        this._convertBoundsToPoints(bounds);
-        this._trackingRect._data.properties.bounds = bounds;
-        this._trackingRect.setData(this._trackingRect._data);
+    setTrackingRectBounds: function (bounds) {
+        this.convertBoundsToPoints(bounds);
+        this.trackingRect._data.properties.bounds = bounds;
+        this.trackingRect.setData(this.trackingRect._data);
     },
 
-    _convertBoundsToPoints: function (bounds) {
-        this._trackingRectCoordinates[0][0][0] = bounds._ne.lng;
-        this._trackingRectCoordinates[0][0][1] = bounds._ne.lat;
-        this._trackingRectCoordinates[0][1][0] = bounds._sw.lng;
-        this._trackingRectCoordinates[0][1][1] = bounds._ne.lat;
-        this._trackingRectCoordinates[0][2][0] = bounds._sw.lng;
-        this._trackingRectCoordinates[0][2][1] = bounds._sw.lat;
-        this._trackingRectCoordinates[0][3][0] = bounds._ne.lng;
-        this._trackingRectCoordinates[0][3][1] = bounds._sw.lat;
-        this._trackingRectCoordinates[0][4][0] = bounds._ne.lng;
-        this._trackingRectCoordinates[0][4][1] = bounds._ne.lat;
+    convertBoundsToPoints: function (bounds) {
+        this.trackingRectCoordinates[0][0][0] = bounds._ne.lng;
+        this.trackingRectCoordinates[0][0][1] = bounds._ne.lat;
+        this.trackingRectCoordinates[0][1][0] = bounds._sw.lng;
+        this.trackingRectCoordinates[0][1][1] = bounds._ne.lat;
+        this.trackingRectCoordinates[0][2][0] = bounds._sw.lng;
+        this.trackingRectCoordinates[0][2][1] = bounds._sw.lat;
+        this.trackingRectCoordinates[0][3][0] = bounds._ne.lng;
+        this.trackingRectCoordinates[0][3][1] = bounds._sw.lat;
+        this.trackingRectCoordinates[0][4][0] = bounds._ne.lng;
+        this.trackingRectCoordinates[0][4][1] = bounds._ne.lat;
     },
 
-    _update: function () {
-        if (this._isDragging) {
+    update: function () {
+        if (this.dragging) {
             return;
         }
 
-        var parentBounds = this._parentMap.getBounds();
-        this._setTrackingRectBounds(parentBounds);
+        const parentBounds = this.parentMap.getBounds();
+        this.setTrackingRectBounds(parentBounds);
     },
 
-    _zoomAdjust: function () {
-        var parentZoom = parseInt(this._parentMap.getZoom());
-        this._miniMap.flyTo({
-            center: this._parentMap.getCenter(),
+    zoomAdjust: function () {
+        const parentZoom = parseInt(this.parentMap.getZoom());
+        this.miniMap.flyTo({
+            center: this.parentMap.getCenter(),
             zoom: parentZoom < 4 ? 0 : parentZoom - 3,
             bearing: 0
         });
@@ -204,15 +193,14 @@ Minimap.prototype = Object.assign({}, mapboxgl.NavigationControl.prototype, {
 
 function Minimap(options) {
     Object.assign(this.options, options);
-
-    this._ticking = false;
-    this._lastMouseMoveEvent = null;
-    this._parentMap = null;
-    this._isDragging = false;
-    this._isCursorOverFeature = false;
-    this._previousPoint = [0, 0];
-    this._currentPoint = [0, 0];
-    this._trackingRectCoordinates = [[[], [], [], [], []]];
+    this.ticking = false;
+    this.lastMouseMoveEvent = null;
+    this.parentMap = null;
+    this.dragging = false;
+    this.cursorOverFeature = false;
+    this.previousPoint = [0, 0];
+    this.currentPoint = [0, 0];
+    this.trackingRectCoordinates = [[[], [], [], [], []]];
 }
 
 export default Minimap;

@@ -91,7 +91,7 @@ class StyleController extends React.Component {
                             {Object.keys(mapStyles).map((item, index) => {
                                 return (
                                     <Grid item style={styles.styleCard} key={index} xs={3}>
-                                        <img src={`./static/assets/${item.toLowerCase()}.png`} alt="" className="hoverable" style={styles.stylePreview} onClick={this.handleStyleClick.bind(this, item)} />
+                                        <img src={`static/assets/${item.toLowerCase()}.png`} alt="" className="hoverable" style={styles.stylePreview} onClick={this.handleStyleClick.bind(this, item)} />
                                     </Grid>
                                 );
                             })}

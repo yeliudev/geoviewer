@@ -1,10 +1,10 @@
 /* Written by Ye Liu */
 
 // Mapbox-GL library access token
-const ACCESS_TOKEN = 'pk.eyJ1IjoiZ29vbGhhbnJyeSIsImEiOiJjanYxYWJtajgxOHphM3lteHh5dGNlcGdiIn0.ZL8sPakwzM68TeVwf2ntpA';
+const ACCESS_TOKEN = 'pk.eyJ1IjoieWxpdWRldiIsImEiOiJja2ZldGpkZTcwNDN4MnpvYThsbno3OGd0In0.7OiaH8u5zpRSF7tjly1l7A';
 
 // Server host url
-const API_ROOT = 'http://localhost:5757/api';
+const API_ROOT = 'https://api.catcatserver.xyz/geoviewer';
 
 const SERVICE = {
     // User login interface
@@ -38,8 +38,8 @@ const SERVICE = {
     },
 
     // Dataset fetching interface
-    getDataset: {
-        url: `${API_ROOT}/getDataset`,
+    dataset: {
+        url: `${API_ROOT}/dataset`,
         method: 'GET'
     },
 

@@ -14,12 +14,8 @@ class Feature extends React.Component {
         // Bind event listener
         this.displayFeatureListener = emitter.addListener('displayFeature', () => {
             // Initialize TapTarget
-            var elems = document.querySelectorAll('.tap-target');
-            var tapTarget = M.TapTarget.init(elems, {
-                onClose: () => {
-                    emitter.emit('openMenu');
-                }
-            })[0];
+            const elems = document.querySelectorAll('.tap-target');
+            const tapTarget = M.TapTarget.init(elems)[0];
 
             // Display feature
             tapTarget.open();
@@ -33,9 +29,6 @@ class Feature extends React.Component {
     componentWillUnmount() {
         // Destory TapTarget
         this.state.tapTarget.destory();
-
-        // Remove event listener
-        emitter.removeListener(this.openMenuListener);
     }
 
     render() {

@@ -9,7 +9,7 @@ import { indigo } from '@material-ui/core/colors';
 
 import emitter from '@utils/events.utils';
 import request from '@utils/request.utils';
-import datasets from '@utils/dataset.utils';
+import datasets from '@utils/datasets.utils';
 import '@styles/layerController.style.css';
 
 const theme = createMuiTheme({
@@ -97,19 +97,18 @@ class LayerController extends React.Component {
         // Load dataset
         if (!deleting && e.target.value.length) {
             // Get dataset id
-            var id = e.target.value[e.target.value.length - 1];
+            const id = e.target.value[e.target.value.length - 1];
 
             // Display snackbar
             emitter.emit('showSnackbar', 'default', `Downloading dataset '${id}'.`);
 
-            // Initiate request
+            // Initialize request
             request({
                 url: datasets[id].url,
-                method: datasets[id].method,
-                credentials: 'same-origin',
+                method: 'GET',
                 successCallback: (res) => {
-                    emitter.emit('displayDataset', id, datasets[id].type, res);
-                    emitter.emit('showSnackbar', 'success', `Dataset '${id}' download succeed.`);
+                    emitter.emit('displayDataset', id, res.geometry, datasets[id].color);
+                    emitter.emit('showSnackbar', 'success', `Dataset '${id}' downloaded successfully.`);
                 }
             });
         }
@@ -122,10 +121,16 @@ class LayerController extends React.Component {
 
     handleLayerListUpdate = (e) => {
         // Update chips
-        [this.state.selected[e.oldIndex], this.state.selected[e.newIndex]] = [this.state.selected[e.newIndex], this.state.selected[e.oldIndex]];
+        const selected = this.state.selected;
+        const removed = selected.splice(e.oldIndex, 1);
+        const length = selected.push(0);
+        for (var i = length - 1; i > e.newIndex; i--) {
+            selected[i] = selected[i - 1];
+        }
+        selected[e.newIndex] = removed[0];
 
         // Move layer
-        emitter.emit('moveLayer', this.state.selected[e.oldIndex], this.state.selected[e.newIndex + 1]);
+        emitter.emit('moveLayer', selected[e.newIndex], e.newIndex > 0 ? selected[e.newIndex - 1] : null);
 
         this.setState({
             selected: this.state.selected
@@ -149,9 +154,8 @@ class LayerController extends React.Component {
 
     componentDidUpdate() {
         // Initialize sortable list
-        var layers = document.getElementById('layers');
-        if (layers) {
-            Sortable.create(layers, {
+        if (document.getElementById('layers')) {
+            Sortable.create(document.getElementById('layers'), {
                 group: 'layers',
                 handle: '.handle',
                 animation: 200,

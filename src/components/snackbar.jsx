@@ -27,6 +27,11 @@ class Snackbar extends React.Component {
 
         // Bind event listeners
         this.showSnackbarListener = emitter.addListener('showSnackbar', (variant, message) => {
+            // Set error message
+            if (variant === 'error') {
+                message = 'Error: ' + message;
+            }
+
             // Show snackbar
             this.props.enqueueSnackbar(message, {
                 variant: variant,
@@ -35,12 +40,14 @@ class Snackbar extends React.Component {
             });
         });
 
-        this.showLoginingSnackbarListener = emitter.addListener('showLoginingSnackbar', e => {
+        this.showLoggingInSnackbarListener = emitter.addListener('showLoggingInSnackbar', e => {
             // Show persist snackbar
-            var message = `Logining to ${e}...`;
-            var key = this.props.enqueueSnackbar(message, {
+            const key = this.props.enqueueSnackbar(`Logging in to ${e}...`, {
                 variant: 'info',
-                persist: true,
+                persist: true, anchorOrigin: {
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }
             });
 
             // Save snackbar key
@@ -49,7 +56,7 @@ class Snackbar extends React.Component {
             });
         });
 
-        this.hideLoginingSnackbarListener = emitter.addListener('hideLoginingSnackbar', () => {
+        this.hideLoggingInSnackbarListener = emitter.addListener('hideLoginingSnackbar', () => {
             // Hide persist snackbar
             this.props.closeSnackbar(this.state.key);
         });
@@ -58,14 +65,12 @@ class Snackbar extends React.Component {
     componentWillUnmount() {
         // Remove event listeners
         emitter.removeListener(this.showSnackbarListener);
-        emitter.removeListener(this.showLoginingSnackbarListener);
-        emitter.removeListener(this.hideLoginingSnackbarListener);
+        emitter.removeListener(this.showLoggingInSnackbarListener);
+        emitter.removeListener(this.hideLoggingInSnackbarListener);
     }
 
     render() {
-        return (
-            <div></div>
-        );
+        return <div></div>;
     }
 }
 
