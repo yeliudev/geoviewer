@@ -147,11 +147,11 @@ module.exports = function (webpackEnv) {
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
-            path
-              .relative(paths.appSrc, info.absoluteResourcePath)
-              .replace(/\\/g, '/')
+          path
+            .relative(paths.appSrc, info.absoluteResourcePath)
+            .replace(/\\/g, '/')
         : isEnvDevelopment &&
-          (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
+        (info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')),
       // Prevents conflicts when multiple webpack runtimes (from different apps)
       // are used on the same page.
       jsonpFunction: `webpackJsonp${appPackageJson.name}`,
@@ -168,13 +168,13 @@ module.exports = function (webpackEnv) {
             parser: safePostCssParser,
             map: shouldUseSourceMap
               ? {
-                  // `inline: false` forces the sourcemap to be output into a
-                  // separate file
-                  inline: false,
-                  // `annotation: true` appends the sourceMappingURL to the end of
-                  // the css file, helping the browser find the sourcemap
-                  annotation: true,
-                }
+                // `inline: false` forces the sourcemap to be output into a
+                // separate file
+                inline: false,
+                // `annotation: true` appends the sourceMappingURL to the end of
+                // the css file, helping the browser find the sourcemap
+                annotation: true,
+              }
               : false,
           },
           cssProcessorPluginOptions: {
@@ -304,7 +304,7 @@ module.exports = function (webpackEnv) {
                     },
                   ],
                 ],
-                
+
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -346,7 +346,7 @@ module.exports = function (webpackEnv) {
                 cacheDirectory: true,
                 // See #6846 for context on why cacheCompression is disabled
                 cacheCompression: false,
-                
+
                 // Babel sourcemaps are needed for debugging into node_modules
                 // code.  Without the options below, debuggers like VSCode
                 // show incorrect code and set breakpoints on the wrong lines.
@@ -423,19 +423,19 @@ module.exports = function (webpackEnv) {
           },
           isEnvProduction
             ? {
-                minify: {
-                  removeComments: true,
-                  collapseWhitespace: true,
-                  removeRedundantAttributes: true,
-                  useShortDoctype: true,
-                  removeEmptyAttributes: true,
-                  removeStyleLinkTypeAttributes: true,
-                  keepClosingSlash: true,
-                  minifyJS: true,
-                  minifyCSS: true,
-                  minifyURLs: true,
-                },
-              }
+              minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true,
+              },
+            }
             : undefined
         )
       ),
@@ -443,8 +443,8 @@ module.exports = function (webpackEnv) {
       // a network request.
       // https://github.com/facebook/create-react-app/issues/5358
       isEnvProduction &&
-        shouldInlineRuntimeChunk &&
-        new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
+      shouldInlineRuntimeChunk &&
+      new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
       // Makes some environment variables available in index.html.
       // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
       // <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
@@ -471,14 +471,14 @@ module.exports = function (webpackEnv) {
       // makes the discovery automatic so you don't have to restart.
       // See https://github.com/facebook/create-react-app/issues/186
       isEnvDevelopment &&
-        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          // Options similar to the same options in webpackOptions.output
-          // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+      new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // both options are optional
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
       //   output file so that tools can pick it up without having to parse
@@ -512,16 +512,16 @@ module.exports = function (webpackEnv) {
       // Generate a service worker script that will precache, and keep up to date,
       // the HTML & assets that are part of the webpack build.
       isEnvProduction &&
-        fs.existsSync(swSrc) &&
-        new WorkboxWebpackPlugin.InjectManifest({
-          swSrc,
-          dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
-          exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
-          // Bump up the default maximum size (2mb) that's precached,
-          // to make lazy-loading failure scenarios less likely.
-          // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
-          maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-        }),
+      fs.existsSync(swSrc) &&
+      new WorkboxWebpackPlugin.InjectManifest({
+        swSrc,
+        dontCacheBustURLsMatching: /\.[0-9a-f]{8}\./,
+        exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
+        // Bump up the default maximum size (2mb) that's precached,
+        // to make lazy-loading failure scenarios less likely.
+        // See https://github.com/cra-template/pwa/issues/13#issuecomment-722667270
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

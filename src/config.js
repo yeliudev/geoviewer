@@ -48,6 +48,6 @@ const SERVICE = {
         url: `${API_ROOT}/search`,
         method: 'GET'
     }
-}
+};
 
 export { ACCESS_TOKEN, SERVICE };

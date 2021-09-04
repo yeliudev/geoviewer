@@ -25,7 +25,7 @@ class Menu extends React.Component {
         open: false,
         actions: [
             {
-                name: 'Report bugs',
+                name: 'Report a bug',
                 icon: <Icon style={styles.fontIcon}>bug_report</Icon>,
                 color: 'green',
                 callback: () => {

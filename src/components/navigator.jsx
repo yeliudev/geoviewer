@@ -94,7 +94,7 @@ class Navigator extends React.Component {
                 <AppBar style={styles.root} position="static">
                     <Toolbar>
                         {/* Logo */}
-                        <a style={styles.logoContainer} href="/">
+                        <a style={styles.logoContainer} href="%PUBLIC_URL%">
                             <img style={styles.logo} src="static/assets/logo.png" alt="" />
                         </a>
 
